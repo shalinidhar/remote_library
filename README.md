@@ -12,7 +12,7 @@ A high-performance, lightweight web server designed to stream educational conten
 * **Custom HTTP Engine:** Built using the native `node:http` module to minimize overhead and avoid the "abstraction tax" of heavy frameworks like Express.
 * **Memory-Efficient Streaming:** Implements Node.js `ReadStreams` to serve large PDF assets. This ensures a constant memory footprint (O(1) space complexity), allowing the server to run on devices with as little as 512MB RAM.
 * **High-Speed Search:** Integrated **SQLite FTS5 (Full-Text Search)** for sub-10ms indexing and retrieval of document metadata.
-* **Containerized Workflow:** Fully Dockerized with multi-platform support, ensuring seamless deployment across development environments and ARM-based edge hardware.
+* **Containerized Workflow:** Fully Dockerized with multi-platform support, ensuring seamless deployment across environments. 
 
 ---
 
