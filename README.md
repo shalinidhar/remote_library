@@ -27,6 +27,8 @@ docker pull shalinidhar/remote_library:v1.0
 # Run the server on port 1234
 docker run -d -p 1234:1234 --name library-server shalinidhar/remote_library:v1.0
 
+```
+
 ---
    ____________________________________________________
   |____________________________________________________|
