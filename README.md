@@ -1,14 +1,4 @@
-       .--.                   .---.
-   .---|__|           .-.     |~~~|
-.--|===|--|_          |_|     |~~~|--.
-|  |===|  |'\     .---!~|  .--|   |--|
-|%%|   |  |.'\    |===| |--|%%|   |  |
-|%%|   |  |\.'\   |   | |__|  |   |  |
-|  |   |  | \  \  |===| |==|  |   |  |
-|  |   |__|  \.'\ |   |_|__|  |~~~|__|
-|  |===|--|   \.'\|===|~|--|%%|~~~|--|
-^--^---'--^    `-'`---^-^--^--^---'--' hjw
-# Remote Library Server 
+# - - Remote Library Server - -  
 
 A high-performance, lightweight web server designed to stream educational content from resource-constrained devices like the **Raspberry Pi**. Built with TypeScript and Node.js.
 
@@ -36,6 +26,8 @@ docker pull shalinidhar/remote_library:v1.0
 
 # Run the server on port 1234
 docker run -d -p 1234:1234 --name library-server shalinidhar/remote_library:v1.0
+
+---
 
    ____________________________________________________
   |____________________________________________________|
