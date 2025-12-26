@@ -28,8 +28,6 @@ docker pull shalinidhar/remote_library:v1.0
 docker run -d -p 1234:1234 --name library-server shalinidhar/remote_library:v1.0
 
 ```
-
----
    ____________________________________________________
   |____________________________________________________|
   | __     __   ____   ___ ||  ____    ____     _  __  |
