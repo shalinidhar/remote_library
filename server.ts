@@ -3,35 +3,19 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 
-//SETTING UP DATABASE PART
+//SETTING UP DATABASE HALF
 import Database from 'better-sqlite3';
 const db = new Database('./library.db'); //connect to DB
 
-//create a table
-// let sql = 'CREATE VIRTUAL TABLE resources USING FTS5(title,author,subject,year,file_type,file_path)';
-// db.exec(sql);
-
-//inserting values into table. file_types: paper, video, book
-// const insert = "INSERT INTO resources VALUES ('Consumer Choice and Collective Impact', 'Julia Nefsky', 'Philosophy', '2018', 'paper', 'Nefksy.pdf')"
-// db.exec(insert);
-
-//quering database
-//const q = "consumer choice"
-// const stmt = db.prepare('SELECT * FROM resources');
-// const allUsers = stmt.all(); 
-
-// console.log(allUsers);
-
-
-//NETWORKING PART
+//NETWORKING HALF
 const port = 1234;
 // Helper to get the current folder path
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
-function openFile(name: string, res: http.ServerResponse):void {
+function openFile(name: string, res: http.ServerResponse, sType: string):void {
     console.log("serving file");
-    const filePath = path.join(__dirname, name);
+    const filePath = path.join(dirname, name);
     console.log('file', filePath);
 
     if (!fs.existsSync(filePath)) {
@@ -40,20 +24,18 @@ function openFile(name: string, res: http.ServerResponse):void {
         return;
     }
 
-    // 2. Set the Headers so the browser knows it's a PDF
+    let conType = "application/pdf";
+    if (sType=== "video"){
+        conType = "video/mp4";
+    }
     res.writeHead(200, {
-        "Content-Type": "application/pdf",
-        // "inline" means open in browser, "attachment" means download it
+        "Content-Type": conType,
         "Content-Disposition": "inline"
     });
 
-    // 3. Stream the file
     const readStream = fs.createReadStream(filePath);
-    
-    // This connects the 'File' pipe to the 'Network' pipe
     readStream.pipe(res);
 
-    // Handle errors during streaming (e.g., file deleted mid-way)
     readStream.on('error', (err) => {
         console.error("Stream error:", err);
         res.end();
@@ -61,7 +43,7 @@ function openFile(name: string, res: http.ServerResponse):void {
 
 }
 
-interface Resource {
+type Resource = {
     title: string;
     author: string;
     subject: string;
@@ -77,14 +59,14 @@ function searchFile(searchTerm: string):Resource[] {
     return files as Resource[]
 }
 
-
 let server = http.createServer((req,res)=>{
     const url = new URL(req.url || '', `http://${req.headers.host}`);
     const searchTerm = url.searchParams.get('term');
     const searchPath = url.searchParams.get('file');
+    const searchType = url.searchParams.get('type') as string;
 
     if (url.pathname === '/open' && searchPath){
-        openFile(searchPath, res);
+        openFile(searchPath, res, searchType);
         return; 
     }
 
@@ -137,17 +119,18 @@ let server = http.createServer((req,res)=>{
 
             res.write(`<p>Search Results:</p>`);
 
-            tableRows = files.map(book => `
+            tableRows = files.map(f => `
             <tr>
                 <td style="padding: 10px; border-bottom: 1px solid #ddd;">
-                    <strong>${book.title}</strong>
+                    <strong>${f.title}</strong>
                 </td>
                 <td style="padding: 10px; border-bottom: 1px solid #ddd;">
-                    ${book.author}
+                    ${f.author}
                 </td>
                 <td style="padding: 10px; border-bottom: 1px solid #ddd;">
                     <form action="/open" method="GET" target="_blank" style="margin:0;">
-                        <input type="hidden" name="file" value="${book.file_path}" />
+                        <input type="hidden" name="file" value="${f.file_path}" />
+                        <input type="hidden" name="type" value="${f.file_type}" />
                         <button type="submit">View</button>
                     </form>
                 </td>
