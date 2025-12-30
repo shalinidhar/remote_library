@@ -38,7 +38,7 @@ function openFile(name: string, res: http.ServerResponse, sType: string):void {
 
     readStream.on('error', (err) => {
         console.error("Stream error:", err);
-        res.end();
+        res.end("");
     });
 
 }
@@ -98,27 +98,7 @@ let server = http.createServer((req,res)=>{
             res.end('</center>');
             return;
         } else {
-            //display the output with button to open
-
-            // const htmlList = files.map(book => `
-            //     <li>
-            //         <strong>${book.title}</strong> by ${book.author} 
-            //         <br>
-            //         <form action="/open" method = "GET" target="_blank">
-            //         <input 
-            //             name = "file"
-            //             type = "hidden"
-            //             value = ${book.file_path}
-            //         />
-            //         <button type = "submit"> View </button>
-            //         </form>
-            //     </li>
-            // `).join('');
-
-            // res.write(`<center><ul>${htmlList}</ul></center>`);
-
             res.write(`<p>Search Results:</p>`);
-
             tableRows = files.map(f => `
             <tr>
                 <td style="padding: 10px; border-bottom: 1px solid #ddd;">
